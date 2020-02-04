@@ -62,6 +62,25 @@ class VolumioClient(object):
     def resume(self):
         self.command('play')
 
+    def prev(self):
+        self.command('prev')
+
+    def next(self):
+        self.command('next')
+
+    def volume(self, volume):
+        self.command('volume', volume=volume)
+
     def get_state(self):
         resp = self.api.getstate.list()
         return resp.body
+
+    def play_tracks(self, track_list, initial_index=0):
+        """Play the specified tracks, starting from initial_index.
+
+        The track_list must be a list of track dicts (e.g. as returned
+        by the browse or search endpoints).
+        """
+        self.api.replaceandplay.create(
+            body={'list': track_list, 'index': initial_index}
+        )
